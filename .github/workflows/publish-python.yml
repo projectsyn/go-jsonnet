@@ -6,6 +6,7 @@ name: Build and Publish Python Package
 
 # For now, just trigger this workflow manually.
 on:
+  pull_request: {}
   workflow_dispatch:
     inputs:
       upload_to_pypi:
@@ -97,7 +98,7 @@ jobs:
     name: "Upload packages to PyPI"
     needs: [build_sdist, build_wheels]
     runs-on: ubuntu-24.04
-    if: "${{ inputs.upload_to_pypi }}"
+    if: "${{ github.event_name == 'workflow_dispatch' && inputs.upload_to_pypi }}"
     permissions:
       contents: read
       id-token: write # Needed for PyPI Trusted Publishing
